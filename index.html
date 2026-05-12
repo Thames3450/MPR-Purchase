@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>MPR Purchase Request System</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <img src="icons/cart-large-svgrepo-com.svg" alt="MPR">
+        </div>
+        <div>
+          <h1>MPR Purchase</h1>
+          <p data-i18n="systemSubtitle">ระบบขอสั่งซื้ออะไหล่</p>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-page="dashboard">
+          <img src="icons/chart-2-svgrepo-com.svg" alt="">
+          <span data-i18n="dashboard">แดชบอร์ด</span>
+        </button>
+
+        <button class="nav-item" data-page="newRequest">
+          <img src="icons/cart-plus-svgrepo-com.svg" alt="">
+          <span data-i18n="newRequest">เพิ่มคำขอสั่งซื้อ</span>
+        </button>
+
+        <button class="nav-item" data-page="requestList">
+          <img src="icons/clipboard-list-svgrepo-com.svg" alt="">
+          <span data-i18n="requestList">รายการคำขอ</span>
+        </button>
+
+        <button class="nav-item" data-page="purchasingFollowup">
+          <img src="icons/archive-up-svgrepo-com.svg" alt="">
+          <span data-i18n="purchasingFollowup">ติดตามจัดซื้อ</span>
+        </button>
+
+        <button class="nav-item" data-page="consolidationPage">
+          <img src="icons/repeat-svgrepo-com.svg" alt="">
+          <span data-i18n="purchaseConsolidation">รวมรายการสั่งซื้อ</span>
+        </button>
+
+        <button class="nav-item" data-page="monthlySummary">
+          <img src="icons/calendar-svgrepo-com.svg" alt="">
+          <span data-i18n="monthlySummary">สรุปรายเดือน</span>
+        </button>
+
+        <button class="nav-item" data-page="exportPage">
+          <img src="icons/download-minimalistic-svgrepo-com.svg" alt="">
+          <span data-i18n="export">ส่งออกข้อมูล</span>
+        </button>
+
+        <button class="nav-item" data-page="settingsPage">
+          <img src="icons/setting-2-svgrepo-com.svg" alt="">
+          <span data-i18n="settings">ตั้งค่า</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="footer-icon">
+          <img src="icons/shield-user-svgrepo-com.svg" alt="">
+        </div>
+        <div>
+          <p>MVR Maintenance</p>
+          <small>Smart Purchase Request</small>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn">☰</button>
+          <div>
+            <h2 id="pageTitle">Dashboard</h2>
+            <p id="pageDesc">ภาพรวมคำขอสั่งซื้ออะไหล่</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="lang-btn active" data-lang="th">TH</button>
+          <button class="lang-btn" data-lang="zh">中文</button>
+        </div>
+      </header>
+
+      <!-- Dashboard -->
+      <section class="page active" id="dashboard">
+        <div class="hero-panel">
+          <div>
+            <span class="hero-chip">MPR Smart Maintenance</span>
+            <h3 data-i18n="dashboardHeroTitle">ระบบควบคุมคำขอสั่งซื้ออะไหล่</h3>
+            <p data-i18n="dashboardHeroDesc">
+              รวมรายการขอสั่งซื้อ ติดตามสถานะจัดซื้อ และส่งออกข้อมูลให้จัดซื้อได้เป็นระบบ
+            </p>
+          </div>
+
+          <div class="hero-art">
+            <img src="icons/cart-large-svgrepo-com.svg" alt="">
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-icon blue">
+              <img src="icons/clipboard-list-svgrepo-com.svg" alt="">
+            </div>
+            <div>
+              <p data-i18n="totalRequests">คำขอทั้งหมด</p>
+              <h3 id="totalRequests">0</h3>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon amber">
+              <img src="icons/history-svgrepo-com.svg" alt="">
+            </div>
+            <div>
+              <p data-i18n="pending">รอดำเนินการ</p>
+              <h3 id="pendingCount">0</h3>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon red">
+              <img src="icons/alarm-svgrepo-com.svg" alt="">
+            </div>
+            <div>
+              <p data-i18n="urgentItems">รายการด่วน</p>
+              <h3 id="urgentCount">0</h3>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon green">
+              <img src="icons/check-circle-svgrepo-com.svg" alt="">
+            </div>
+            <div>
+              <p data-i18n="received">ได้รับของแล้ว</p>
+              <h3 id="receivedCount">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h3 data-i18n="latestRequests">รายการล่าสุด</h3>
+                <p data-i18n="latestRequestsDesc">คำขอสั่งซื้อที่เพิ่มล่าสุด</p>
+              </div>
+
+              <button class="small-btn" onclick="goPage('requestList')" data-i18n="viewAll">
+                ดูทั้งหมด
+              </button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>PR No.</th>
+                    <th data-i18n="partName">ชื่ออะไหล่</th>
+                    <th data-i18n="machine">เครื่องจักร</th>
+                    <th>Request Qty</th>
+                    <th>Ordered Qty</th>
+                    <th data-i18n="status">สถานะ</th>
+                  </tr>
+                </thead>
+                <tbody id="latestTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <h3 data-i18n="urgentList">รายการเร่งด่วน</h3>
+                <p data-i18n="urgentListDesc">อะไหล่ที่ควรเร่งติดตาม</p>
+              </div>
+            </div>
+
+            <div id="urgentList" class="urgent-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- New Request -->
+      <section class="page" id="newRequest">
+        <div class="form-card premium-form">
+          <div class="form-head">
+            <div>
+              <span class="section-chip">
+                <img src="icons/cart-plus-svgrepo-com.svg" alt="">
+                Purchase Request
+              </span>
+              <h3 data-i18n="newRequest">เพิ่มคำขอสั่งซื้อ</h3>
+              <p data-i18n="newRequestDesc">กรอกเฉพาะข้อมูลสำคัญสำหรับส่งจัดซื้อ</p>
+            </div>
+
+            <div class="pr-preview">
+              <span data-i18n="requestNo">เลขคำขอ</span>
+              <strong id="nextPrNo">MPR-PR-000000-001</strong>
+            </div>
+          </div>
+
+          <form id="requestForm" class="simple-form">
+            <div class="compact-grid">
+
+              <div class="field">
+                <label data-i18n="requester">ผู้ขอ</label>
+                <select id="requester" required>
+                  <option value="" data-i18n="selectRequester">เลือกผู้ขอ</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label data-i18n="department">แผนก</label>
+                <select id="department" required>
+                  <option value="" data-i18n="selectDepartment">เลือกแผนก</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label data-i18n="machine">เครื่องจักร</label>
+                <input
+                  type="text"
+                  id="machine"
+                  placeholder="เช่น IVF6 Lotus, Door Liner, Crusher"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label data-i18n="partName">ชื่ออะไหล่</label>
+                <input type="text" id="partName" placeholder="เช่น Heater Board" required />
+              </div>
+
+              <div class="field">
+                <label data-i18n="model">รุ่น / Model</label>
+                <input type="text" id="model" placeholder="เช่น LC1D09M7" />
+              </div>
+
+              <div class="field">
+                <label data-i18n="brand">ยี่ห้อ</label>
+                <input type="text" id="brand" placeholder="เช่น Schneider, SMC, OMRON" />
+              </div>
+
+              <div class="field">
+                <label data-i18n="requestQty">จำนวนที่ขอ</label>
+                <input type="number" id="qty" min="1" value="1" required />
+              </div>
+
+              <div class="field">
+                <label data-i18n="urgency">ความเร่งด่วน</label>
+                <select id="urgency" required>
+                  <option value="Normal" data-i18n-option="normal">ปกติ</option>
+                  <option value="Urgent" data-i18n-option="urgent">ด่วน</option>
+                  <option value="Critical" data-i18n-option="critical">ด่วนมาก</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label data-i18n="reason">เหตุผลการสั่งซื้อ</label>
+              <textarea
+                id="reason"
+                rows="4"
+                placeholder="เช่น อะไหล่หมด / เครื่องจักรหยุด / ใช้ใน TPM / ต้องเตรียมสำรอง"
+                required></textarea>
+            </div>
+
+            <div class="field">
+              <label data-i18n="partImage">รูปภาพอะไหล่</label>
+
+              <div class="image-upload-box">
+                <input type="file" id="imageFile" accept="image/*" hidden />
+
+                <button type="button" class="image-upload-btn" id="imageUploadBtn">
+                  <img src="icons/gallery-add-svgrepo-com.svg" alt="">
+                  <span data-i18n="addPartImage">เพิ่มรูปอะไหล่</span>
+                </button>
+
+                <p class="image-hint" data-i18n="imageHint">รองรับ JPG / PNG / รูปจากมือถือ</p>
+
+                <div class="image-preview" id="imagePreviewBox">
+                  <img id="imagePreview" alt="Part Image Preview" />
+                  <button type="button" class="remove-image-btn" id="removeImageBtn">
+                    <img src="icons/close-circle-svgrepo-com.svg" alt="">
+                    <span data-i18n="removeImage">ลบรูป</span>
+                  </button>
+                </div>
+              </div>
+
+              <input type="hidden" id="imageUrl" />
+            </div>
+
+            <input type="hidden" id="requestDate" />
+
+            <div class="form-actions compact-actions">
+              <button type="button" class="ghost-btn" id="clearFormBtn" data-i18n="clearForm">
+                ล้างฟอร์ม
+              </button>
+
+              <button type="submit" class="primary-btn" data-i18n="saveRequest">
+                บันทึกคำขอ
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Request List -->
+      <section class="page" id="requestList">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3 data-i18n="requestList">รายการคำขอสั่งซื้อ</h3>
+              <p data-i18n="requestListDesc">ค้นหา กรอง และอัปเดตสถานะคำขอ</p>
+            </div>
+          </div>
+
+          <div class="filters">
+            <input
+              type="text"
+              id="searchInput"
+              data-i18n-placeholder="requestSearchPlaceholder"
+              placeholder="ค้นหา PR / ชื่ออะไหล่ / เครื่องจักร / รุ่น"
+            />
+
+            <select id="statusFilter">
+              <option value="All" data-i18n="allStatus">ทุกสถานะ</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Sent to Purchasing">Sent to Purchasing</option>
+              <option value="Qty Adjusted">Qty Adjusted</option>
+              <option value="PO Issued">PO Issued</option>
+              <option value="Partially Ordered">Partially Ordered</option>
+              <option value="Ordered">Ordered</option>
+              <option value="Partially Received">Partially Received</option>
+              <option value="Received">Received</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+
+            <input type="month" id="monthFilter" />
+
+            <button class="small-btn" id="resetFilterBtn" data-i18n="reset">รีเซ็ต</button>
+          </div>
+
+          <div class="request-card-list" id="requestCardList"></div>
+        </div>
+      </section>
+
+      <!-- Purchasing Follow-up -->
+      <section class="page" id="purchasingFollowup">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3 data-i18n="purchasingFollowup">ติดตามจัดซื้อ</h3>
+              <p data-i18n="purchasingFollowupDesc">ติดตามรายการที่ส่งจัดซื้อแล้ว / PO / Ordered / Received</p>
+            </div>
+          </div>
+
+          <div class="filters">
+            <input
+              type="text"
+              id="followupSearch"
+              data-i18n-placeholder="followupSearchPlaceholder"
+              placeholder="ค้นหา PR / อะไหล่ / เครื่องจักร / PO"
+            />
+
+            <select id="followupStatusFilter">
+              <option value="All" data-i18n="allStatus">ทุกสถานะ</option>
+              <option value="Sent to Purchasing">Sent to Purchasing</option>
+              <option value="Qty Adjusted">Qty Adjusted</option>
+              <option value="PO Issued">PO Issued</option>
+              <option value="Partially Ordered">Partially Ordered</option>
+              <option value="Ordered">Ordered</option>
+              <option value="Partially Received">Partially Received</option>
+              <option value="Received">Received</option>
+            </select>
+
+            <input type="month" id="followupMonthFilter" />
+
+            <button class="small-btn" id="resetFollowupBtn" data-i18n="reset">รีเซ็ต</button>
+          </div>
+
+          <div class="request-card-list" id="followupList"></div>
+        </div>
+      </section>
+
+      <!-- Purchase Consolidation -->
+      <section class="page" id="consolidationPage">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3 data-i18n="purchaseConsolidation">รวมรายการสั่งซื้อ</h3>
+              <p data-i18n="purchaseConsolidationDesc">
+                รวมรายการอะไหล่ที่มีชื่อ / รุ่น / ยี่ห้อเดียวกัน เพื่อให้จัดซื้อสั่งซื้อได้ง่ายขึ้น
+              </p>
+            </div>
+          </div>
+
+          <div class="filters">
+            <input
+              type="text"
+              id="consolidationSearch"
+              data-i18n-placeholder="consolidationSearchPlaceholder"
+              placeholder="ค้นหา Model / Part Name / Brand / Department"
+            />
+
+            <select id="consolidationStatusFilter">
+              <option value="Active" data-i18n="activeItemsOnly">เฉพาะรายการที่ยังไม่จบ</option>
+              <option value="All" data-i18n="allItems">ทุกรายการ</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Sent to Purchasing">Sent to Purchasing</option>
+              <option value="Qty Adjusted">Qty Adjusted</option>
+              <option value="PO Issued">PO Issued</option>
+              <option value="Partially Ordered">Partially Ordered</option>
+              <option value="Ordered">Ordered</option>
+              <option value="Partially Received">Partially Received</option>
+              <option value="Received">Received</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+
+            <input type="month" id="consolidationMonthFilter" />
+
+            <button class="small-btn" id="resetConsolidationBtn" data-i18n="reset">รีเซ็ต</button>
+          </div>
+
+          <div class="consolidation-summary">
+            <div>
+              <span>Grouped Items</span>
+              <strong id="consolidatedGroupCount">0</strong>
+            </div>
+            <div>
+              <span>Total Request Qty</span>
+              <strong id="consolidatedRequestQty">0</strong>
+            </div>
+            <div>
+              <span>Total Ordered Qty</span>
+              <strong id="consolidatedOrderedQty">0</strong>
+            </div>
+            <div>
+              <span>Total Remaining Qty</span>
+              <strong id="consolidatedRemainingQty">0</strong>
+            </div>
+          </div>
+
+          <div class="consolidation-list" id="consolidationList"></div>
+        </div>
+      </section>
+
+      <!-- Monthly Summary -->
+      <section class="page" id="monthlySummary">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3 data-i18n="monthlySummary">สรุปรายเดือน</h3>
+              <p data-i18n="monthlySummaryDesc">รวมยอดคำขอสั่งซื้อแยกตามเดือน</p>
+            </div>
+
+            <input type="month" id="summaryMonth" />
+          </div>
+
+          <div class="summary-grid small">
+            <div class="summary-card">
+              <div class="summary-icon blue">
+                <img src="icons/clipboard-list-svgrepo-com.svg" alt="">
+              </div>
+              <div>
+                <p data-i18n="totalRequests">คำขอทั้งหมด</p>
+                <h3 id="monthTotal">0</h3>
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-icon red">
+                <img src="icons/alarm-svgrepo-com.svg" alt="">
+              </div>
+              <div>
+                <p data-i18n="urgentItems">รายการด่วน</p>
+                <h3 id="monthUrgent">0</h3>
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-icon purple">
+                <img src="icons/archive-up-svgrepo-com.svg" alt="">
+              </div>
+              <div>
+                <p data-i18n="sentToPurchasing">ส่งจัดซื้อแล้ว</p>
+                <h3 id="monthSent">0</h3>
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-icon green">
+                <img src="icons/check-circle-svgrepo-com.svg" alt="">
+              </div>
+              <div>
+                <p data-i18n="received">ได้รับของแล้ว</p>
+                <h3 id="monthReceived">0</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>PR No.</th>
+                  <th data-i18n="requestDate">วันที่ขอ</th>
+                  <th data-i18n="machine">เครื่องจักร</th>
+                  <th data-i18n="partName">ชื่ออะไหล่</th>
+                  <th>Request Qty</th>
+                  <th>Ordered Qty</th>
+                  <th>Received Qty</th>
+                  <th data-i18n="urgency">ความเร่งด่วน</th>
+                  <th data-i18n="status">สถานะ</th>
+                </tr>
+              </thead>
+              <tbody id="monthlyTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Export -->
+      <section class="page" id="exportPage">
+        <div class="export-layout">
+          <div class="export-hero">
+            <div class="export-hero-text">
+              <div class="hero-badge">
+                <img src="icons/download-minimalistic-svgrepo-com.svg" alt="">
+                Excel Export Center
+              </div>
+
+              <h3 data-i18n="export">ส่งออกข้อมูล</h3>
+              <p data-i18n="exportDesc">
+                เลือกข้อมูลที่ต้องการ แล้วส่งออกเป็นไฟล์ Excel พร้อมรูปอะไหล่สำหรับส่งต่อให้จัดซื้อ
+              </p>
+            </div>
+
+            <div class="export-hero-side">
+              <div class="hero-mini-card">
+                <span data-i18n="supportedFiles">รูปแบบไฟล์</span>
+                <strong>Excel .xlsx</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="export-filter-card">
+            <div class="export-filter-head">
+              <div>
+                <h3 data-i18n="exportFilterTitle">เลือกข้อมูลที่ต้องการ Export</h3>
+                <p data-i18n="exportFilterDesc">
+                  สามารถเลือกทั้งหมด / รายเดือน / แผนก / สถานะ และเลือกรวมรูปภาพได้
+                </p>
+              </div>
+            </div>
+
+            <div class="export-filter-grid">
+              <div class="field">
+                <label data-i18n="exportMonth">เดือนที่ต้องการ</label>
+                <input type="month" id="exportMonthFilter">
+                <small data-i18n="exportMonthHint">ปล่อยว่าง = Export ทุกเดือน</small>
+              </div>
+
+              <div class="field">
+                <label data-i18n="department">แผนก</label>
+                <select id="exportDepartmentFilter">
+                  <option value="All" data-i18n="allItems">ทุกแผนก</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label data-i18n="status">สถานะ</label>
+                <select id="exportStatusFilter">
+                  <option value="All" data-i18n="allStatus">ทุกสถานะ</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Sent to Purchasing">Sent to Purchasing</option>
+                  <option value="Qty Adjusted">Qty Adjusted</option>
+                  <option value="PO Issued">PO Issued</option>
+                  <option value="Partially Ordered">Partially Ordered</option>
+                  <option value="Ordered">Ordered</option>
+                  <option value="Partially Received">Partially Received</option>
+                  <option value="Received">Received</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label data-i18n="partImage">รูปภาพอะไหล่</label>
+                <label class="export-check">
+                  <input type="checkbox" id="exportIncludeImage" checked>
+                  <span data-i18n="includeImageInExcel">ใส่รูปภาพลงใน Excel</span>
+                </label>
+                <small data-i18n="includeImageHint">ถ้ารูปโหลดไม่ได้ ระบบจะใส่ลิงก์รูปแทน</small>
+              </div>
+            </div>
+
+            <div class="export-summary-box">
+              <div>
+                <span data-i18n="exportCountLabel">จำนวนรายการที่จะ Export</span>
+                <strong id="exportCountPreview">0 รายการ</strong>
+              </div>
+
+              <button class="primary-btn export-main-btn" id="exportExcelBtn">
+                <img src="icons/chart-2-svgrepo-com.svg" alt="">
+                Export Detail Excel
+              </button>
+            </div>
+          </div>
+
+          <div class="export-action-grid excel-only-grid">
+            <button class="export-card-btn blue" type="button" onclick="quickExportAll()">
+              <div class="export-card-icon">
+                <img src="icons/clipboard-list-svgrepo-com.svg" alt="">
+              </div>
+              <div class="export-card-text">
+                <strong data-i18n="exportAll">Export ทั้งหมด</strong>
+                <span data-i18n="exportAllDesc">ล้างตัวกรองและส่งออกข้อมูลทั้งหมด</span>
+              </div>
+            </button>
+
+            <button class="export-card-btn indigo" type="button" onclick="quickExportThisMonth()">
+              <div class="export-card-icon">
+                <img src="icons/calendar-svgrepo-com.svg" alt="">
+              </div>
+              <div class="export-card-text">
+                <strong data-i18n="exportThisMonth">Export เดือนนี้</strong>
+                <span data-i18n="exportThisMonthDesc">ดึงเฉพาะรายการของเดือนปัจจุบัน</span>
+              </div>
+            </button>
+
+            <button class="export-card-btn orange" type="button" onclick="quickExportUrgent()">
+              <div class="export-card-icon">
+                <img src="icons/alarm-svgrepo-com.svg" alt="">
+              </div>
+              <div class="export-card-text">
+                <strong data-i18n="exportUrgent">Export รายการด่วน</strong>
+                <span data-i18n="exportUrgentDesc">ดึงเฉพาะ Urgent / Critical</span>
+              </div>
+            </button>
+
+            <button class="export-card-btn green" type="button" onclick="quickExportPurchasing()">
+              <div class="export-card-icon">
+                <img src="icons/archive-up-svgrepo-com.svg" alt="">
+              </div>
+              <div class="export-card-text">
+                <strong data-i18n="exportPurchasing">Export ส่งจัดซื้อแล้ว</strong>
+                <span data-i18n="exportPurchasingDesc">ดึงเฉพาะรายการที่อยู่ในขั้นตอนจัดซื้อ</span>
+              </div>
+            </button>
+
+            <button class="export-card-btn purple" type="button" onclick="quickExportConsolidated()">
+              <div class="export-card-icon">
+                <img src="icons/repeat-svgrepo-com.svg" alt="">
+              </div>
+              <div class="export-card-text">
+                <strong data-i18n="exportConsolidated">Export รวมตาม Model</strong>
+                <span data-i18n="exportConsolidatedDesc">รวมยอดอะไหล่ Model เดียวกันสำหรับจัดซื้อ</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="export-note-box">
+            <div class="export-note-icon">
+              <img src="icons/checklist-svgrepo-com.svg" alt="">
+            </div>
+            <div>
+              <strong data-i18n="recommendation">คำแนะนำ</strong>
+              <p data-i18n="exportNote">
+                ถ้าต้องส่งให้จัดซื้อ แนะนำเลือกสถานะ Approved หรือ Sent to Purchasing และเปิดตัวเลือกใส่รูปภาพลงใน Excel เพื่อให้จัดซื้อเห็นอะไหล่ชัดเจน
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section class="page" id="settingsPage">
+        <div class="settings-layout">
+          <div class="settings-hero">
+            <div>
+              <div class="hero-badge">
+                <img src="icons/setting-2-svgrepo-com.svg" alt="">
+                Dropdown Settings
+              </div>
+              <h3 data-i18n="settings">ตั้งค่า</h3>
+              <p data-i18n="settingsDesc">
+                จัดการรายการ Dropdown ที่ใช้ในฟอร์มขอสั่งซื้อ เช่น ผู้ขอ และแผนก
+              </p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <div class="settings-card">
+              <div class="settings-card-head">
+                <div>
+                  <h3 data-i18n="requester">ผู้ขอ</h3>
+                  <p data-i18n="requesterSettingDesc">จัดการรายชื่อผู้ขอในฟอร์ม</p>
+                </div>
+              </div>
+
+              <div class="settings-input-row">
+                <input type="text" id="newRequesterInput" placeholder="เช่น Apiwut / MVR">
+                <button type="button" class="primary-btn" id="addRequesterSettingBtn" data-i18n="add">เพิ่ม</button>
+              </div>
+
+              <div class="setting-list" id="requesterSettingList"></div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-head">
+                <div>
+                  <h3 data-i18n="department">แผนก</h3>
+                  <p data-i18n="departmentSettingDesc">จัดการรายการแผนก</p>
+                </div>
+              </div>
+
+              <div class="settings-input-row">
+                <input type="text" id="newDepartmentInput" placeholder="เช่น MVR, MSR, Maintenance">
+                <button type="button" class="primary-btn" id="addDepartmentSettingBtn" data-i18n="add">เพิ่ม</button>
+              </div>
+
+              <div class="setting-list" id="departmentSettingList"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <div class="modal" id="detailModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modalTitle">Request Detail</h3>
+        <button class="icon-btn" id="closeModalBtn">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
